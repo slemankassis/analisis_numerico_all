@@ -1,0 +1,16 @@
+Separacion
+G(x)=invM*N*x+invM*b
+
+Jacobi
+M=D, U=-L-U
+x(k+1)=	invD*(-L-U)*x(k)+invD*b
+		(b(i) - sum[j=1:n](a(i,j) * x(j)(k))) / a(i,i)
+
+Gseidel
+M=L+D, U=-U
+x(k+1)=	inv(L+D)*(-U)*x(k)+inv(L+D)*b
+(L+D)*x(k+1)=B-U*x(k)
+L*x(k+1)+D*x(k+1)=B-U*x(k)
+D*x(k+1)=B-L*x(k+1)-U*x(k)
+x(k+1)=	invD*B-invD*L*x(k+1)-invD*U*x(k)
+		(b(i) - sum[j=1:n-1](a(i,j) * x(k+1)) - sum[j=i+1:n](a(i,j) * x(j)(k))) / a(i,i)

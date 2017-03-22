@@ -1,0 +1,29 @@
+Función polyfit: ajuste polinomial de datos.
+
+Dado un conjunto de pares de datos (puntos en el plano), representados en MATLAB mediante dos vectores x e y que almacenan, respectivamente, las coordenadas x e y de dichos datos, puede realizarse un ajuste polinómico de grado n (n=1 para una recta, ...) de los mismos sin más que invocar la función polyfit de la siguiente manera:
+
+coef=polyfit(x, y, n)
+
+que devuelve un vector (en este caso de nombre coef) en el que se almacenan los coeficientes (2 en el caso de una recta) en orden decreciente de grado. Así, si se desea ajustar por un polinomio de grado 2 (3 coeficientes, por tanto) un conjunto de datos puede operarse de la siguiente manera:
+
+x=[.25 .5 .7 .8];
+
+y=[.52 .99 1.3 1.45];
+
+n=2;
+
+coef=polyfit(x, y, n);
+
+Así, en el vector coef quedan almacenados los tres coeficientes, que corresponden al polinomio:
+
+-0.5985x2+2.3124x-0.0199
+
+almacenados de modo que
+
+-0.5985->coef(1)
+
+ 2.3124->coef(2)
+
+-0.0199->coef(3)
+
+ 

@@ -1,0 +1,4 @@
+function x = pm(f,a,b)
+x = (b-a)*f((a+b)/2)
+end
+

@@ -1,0 +1,5 @@
+recordar verif que k a veces no es el numero de iteraciones sino que k-1
+
+controlar todo sacando los ;
+
+usar nargout

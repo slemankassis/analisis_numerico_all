@@ -1,0 +1,293 @@
+
+Siguiente: La interpolación multi-dimensional , Arriba: La interpolación   [ Contenido ] [ Índice ]
+
+29.1 Interpolación unidimensional
+
+Octave es compatible con varios métodos de interpolación unidimensional, la mayoría de los cuales se describen en esta sección. La interpolación polinómica y la interpolación de datos dispersos describen métodos adicionales.
+
+Function File: yi = interp1 ( x , y , x )
+Function File: yi = interp1 ( y , xi )
+Function File: yi = interp1 (..., method )
+Function File: yi = interp1 (..., extrap )
+Función del archivo: yi = interp1 (..., "izquierda")
+Función del archivo: yi = interp1 (..., "derecho")
+Function File: pp = interp1 (..., "pp")
+interpolación unidimensional.
+
+Interpolar datos de entrada para determinar el valor de yi en los puntos xi . Si no se especifica, x se toma como los índices de Y ( 1: longitud ( Y ) ). Si Y es una matriz o una matriz N-dimensional, la interpolación se realiza en cada columna de Y .
+
+La interpolación método es uno de:
+
+"más cercano"
+Devolver el vecino más cercano.
+
+"anterior"
+Devolver el vecino anterior.
+
+"siguiente"
+Devolver el vecino.
+
+"lineal" (por defecto)
+La interpolación lineal de los vecinos más próximos.
+
+"pchip"
+Hermite a trozos cúbicos polinomio de interpolación con forma de preservación de la interpolación con primera derivada suave.
+
+"cúbico"
+Interpolación cúbica (lo mismo que "pchip" ).
+
+"ranura"
+spline cúbico de interpolación suave derivados primero y segundo a lo largo de la curva.
+
+Adición '*' para el inicio de cualquier método anterior fuerzas interp1 suponer que x es uniformemente espaciados, y sólo x (1) y x (2) se hace referencia. Esto es por lo general más rápido, y nunca es más lento. El método por defecto es "lineal" .
+
+Si extrap es la cadena "extrap" , entonces extrapolar valores más allá de los criterios de valoración utilizando el actual método . Si extrap es un número, a continuación, reemplazar los valores más allá de los puntos finales con ese número. Cuando no se especifica, extrap defecto NA .
+
+Si el argumento de cadena "pp" se especifica, entonces xi no debe ser suministrado y interp1 devuelve un objeto polinómica a trozos. Este objeto más adelante se puede utilizar con ppval para evaluar la interpolación. Hay una equivalencia, de manera que ppval (interp1 ( x , y , método , "pp" ), xi ) == interp1 ( x , y , xi , método , "extrap" ) .
+
+Puntos duplicados en x especifican un interpolador discontinua. Puede haber como máximo 2 puntos consecutivos con el mismo valor. Si x es cada vez mayor, el interpolador discontinua por defecto es continua por la derecha. Si x es decreciente, el interpolador discontinua defecto es de izquierda continua. La condición de continuidad del interpolador se puede especificar mediante las opciones de "izquierda" o "derecha" para seleccionar un interpolador-izquierda continua o continua por la derecha, respectivamente. Interpolación discontinua sólo se permite para "más cercano" y "lineales" métodos; en los demás casos, los x -valores deben ser únicos.
+
+Un ejemplo de la utilización de interp1 es
+
+xf = [0: 0.05: 10];
+yf = sin (2*pi*xf/5);
+XP = [doce y diez];
+yp = sin (2*pi*xp/5);
+lin = interp1 (xp, yp, xf);
+Cerca = interp1 (XP, YP, xf, "más cercano");
+pch = interp1 (XP, YP, xf, "pchip");
+spl = interp1 (xp, yp, xf, "spline");
+plot (xf, yf, "r", xf, cerca, "g", xf, Lin, "b", xf, PCH, "c", xf, spl, "m",
+      XP, YP, "r *");
+leyenda ( "original", "más cercano", "lineal", "pchip", "spline");
+See also: pchip , spline , interpft , interp2 , interp3 , interpn .
+
+Hay algunas diferencias importantes entre los distintos métodos de interpolación. El "spline" método hace cumplir que la primera y la segunda derivadas de los valores interpolados, tienen una derivada continua, mientras que los otros métodos no lo hacen. Esto significa que los resultados de la "spline" método son generalmente más suave. Si la función a interpolar es, de hecho, suave, a continuación, "spline" dará excelentes resultados. Sin embargo, si la función de ser evaluado es de alguna manera discontinua, a continuación, "pchip" interpolación puede dar mejores resultados.
+
+Esto se puede demostrar por el código
+
+t = -2: 2;
+dt = 1;
+ti = -2: 0.025: 2;
+dti = 0,025;
+y = signo (t);
+ys = interp1 (t, y, ti, "spline");
+yp = interp1 (t, y, ti, "pchip");
+ddys = diff (diff (ys)./dti) ./ dti;
+ddyp = diff (diff (YP) ./ DTI) ./ DTI;
+Figura 1);
+parcela (ti, ys, "r", ti, yp, "g-");
+leyenda ( "spline", "pchip", 4);
+Figura 2);
+parcela (ti, ddys, "r +", ti, ddyp, "g *");
+leyenda ( "spline", "pchip");
+El resultado de los cuales se puede ver en la figura 29.1 y la figura 29.2 .
+
+ interpderiv1
+Figura 29.1: Comparación de los "pchip" y "spline" métodos de interpolación para una función escalonada
+
+ interpderiv2
+Figura 29.2: Comparación de la segunda derivada de la "pchip" y "spline" métodos de interpolación para una función de paso
+
+interpolación de Fourier, es una técnica de remuestreo que una señal se convierte en el dominio de la frecuencia, rellena con ceros y reconvierte a continuación en el dominio del tiempo.
+
+Función del archivo: interpft (x, n)
+Función del archivo: interpft ( x , n , dim )
+interpolación Fourier.
+
+Si x es un vector entonces x se vuelve a muestrear con n puntos. Los datos de x se supone que se equidistantes. Si x es una matriz o una matriz N-dimensional, la interpolación se realiza en cada columna de x .
+
+Si tenue se especifica, entonces interpolar a lo largo de la dimensión oscura .
+
+interpft asume que la función interpolada es periódica, y así se hacen suposiciones acerca de los puntos finales de la interpolación.
+
+See also: interp1 .
+
+Hay dos limitaciones significativas en la interpolación de Fourier. En primer lugar, la señal de función se supone que es periódica, y las señales de modo no periódicas se pobremente representado en los bordes. En segundo lugar, se requiere que tanto la señal y su interpolación a muestrear en puntos equidistantes. Un ejemplo de la utilización de interpft es
+
+t = 0: 0.3: pi; dt = t (2) -t (1);
+n = longitud (t); k = 100;
+ti = t(1) + [0 : k-1]*dt*n/k;
+y = sin (4*t + 0.3) .* cos (3*t - 0.1);
+. Yp = sen (4 * Ti + 0,3) * cos (3 * ti - 0,1);
+parcela (ti, yp, "g", ti, interp1 (t, y, ti, "spline"), "b", ...
+      ti, interpft (y, k), "c", t, y, "r+");
+leyenda ( "sin (4t + 0,3) cos (3t-0.1)", "spline", "interpft", "datos");
+lo que demuestra la pobre comportamiento de interpolación Fourier para funciones no periódicas, como puede verse en la figura 29.3 .
+
+ interpft
+Figura 29.3: Comparación de interp1 y interpft para datos no periódica
+
+Además, las funciones de apoyo estriado y las operaciones de búsqueda que subyacen en el interp1 función se pueden llamar directamente.
+
+Función del archivo: pp = spline ( x , y )
+Function File: yi = spline (x, y, xi)
+Devolver el interpolador spline cúbico de puntos x e y .
+
+Cuando se llama con dos argumentos, devuelva el polinomio a trozos pp que puede utilizarse con ppval para evaluar el polinomio en puntos específicos.
+
+Cuando se llama con un tercer argumento de entrada, spline evalúa la curva de selección en los puntos xi . La forma tercera llamada spline ( x , y , xi ) es equivalente a ppval (spline ( x , y ), xi ) .
+
+La variable x debe ser un vector de longitud n .
+
+Y puede ser un vector o matriz. Si y es un vector debe tener una longitud de ya sea n o n + 2 . Si la longitud de y es n , entonces el "no-a-nudo" se utiliza condición final. Si la longitud de y es n + 2 , a continuación, los primeros y últimos valores del vector y son los valores de la primera derivada de la spline cúbico en los puntos finales.
+
+Si Y es una matriz, entonces el tamaño de y debe tener la forma [ s1 , s2 , ..., sk , n ] o [ s1 , s2 , ..., sk , n + 2] . La matriz se forma de nuevo internamente a una matriz donde la dimensión principal está dada por s1 * s2 * ... * sk y cada fila de esta matriz es entonces tratada por separado. Tenga en cuenta que esto es exactamente lo contrario de interp1 pero se hace para MATLAB compatibilidad.
+
+Ver también: pchip , ppval , mkpp , unmkpp .
+
+Siguiente: La interpolación multi-dimensional , Arriba: La interpolación   [ Contenido ] [ Índice 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Next: Multi-dimensional Interpolation, Up: Interpolation   [Contents][Index]
+
+29.1 One-dimensional Interpolation
+
+Octave supports several methods for one-dimensional interpolation, most of which are described in this section. Polynomial Interpolation and Interpolation on Scattered Data describe additional methods.
+
+Function File: yi = interp1 (x, y, xi)
+Function File: yi = interp1 (y, xi)
+Function File: yi = interp1 (…, method)
+Function File: yi = interp1 (…, extrap)
+Function File: yi = interp1 (…, "left")
+Function File: yi = interp1 (…, "right")
+Function File: pp = interp1 (…, "pp")
+One-dimensional interpolation.
+
+Interpolate input data to determine the value of yi at the points xi. If not specified, x is taken to be the indices of y (1:length (y)). If y is a matrix or an N-dimensional array, the interpolation is performed on each column of y.
+
+The interpolation method is one of:
+
+"nearest"
+Return the nearest neighbor.
+
+"previous"
+Return the previous neighbor.
+
+"next"
+Return the next neighbor.
+
+"linear" (default)
+Linear interpolation from nearest neighbors.
+
+"pchip"
+Piecewise cubic Hermite interpolating polynomial—shape-preserving interpolation with smooth first derivative.
+
+"cubic"
+Cubic interpolation (same as "pchip").
+
+"spline"
+Cubic spline interpolation—smooth first and second derivatives throughout the curve.
+
+Adding ’*’ to the start of any method above forces interp1 to assume that x is uniformly spaced, and only x(1) and x(2) are referenced. This is usually faster, and is never slower. The default method is "linear".
+
+If extrap is the string "extrap", then extrapolate values beyond the endpoints using the current method. If extrap is a number, then replace values beyond the endpoints with that number. When unspecified, extrap defaults to NA.
+
+If the string argument "pp" is specified, then xi should not be supplied and interp1 returns a piecewise polynomial object. This object can later be used with ppval to evaluate the interpolation. There is an equivalence, such that ppval (interp1 (x, y, method, "pp"), xi) == interp1 (x, y, xi, method, "extrap").
+
+Duplicate points in x specify a discontinuous interpolant. There may be at most 2 consecutive points with the same value. If x is increasing, the default discontinuous interpolant is right-continuous. If x is decreasing, the default discontinuous interpolant is left-continuous. The continuity condition of the interpolant may be specified by using the options "left" or "right" to select a left-continuous or right-continuous interpolant, respectively. Discontinuous interpolation is only allowed for "nearest" and "linear" methods; in all other cases, the x-values must be unique.
+
+An example of the use of interp1 is
+
+xf = [0:0.05:10];
+yf = sin (2*pi*xf/5);
+xp = [0:10];
+yp = sin (2*pi*xp/5);
+lin = interp1 (xp, yp, xf);
+near = interp1 (xp, yp, xf, "nearest");
+pch = interp1 (xp, yp, xf, "pchip");
+spl = interp1 (xp, yp, xf, "spline");
+plot (xf,yf,"r", xf,near,"g", xf,lin,"b", xf,pch,"c", xf,spl,"m",
+      xp,yp,"r*");
+legend ("original", "nearest", "linear", "pchip", "spline");
+See also: pchip, spline, interpft, interp2, interp3, interpn.
+
+There are some important differences between the various interpolation methods. The "spline" method enforces that both the first and second derivatives of the interpolated values have a continuous derivative, whereas the other methods do not. This means that the results of the "spline" method are generally smoother. If the function to be interpolated is in fact smooth, then "spline" will give excellent results. However, if the function to be evaluated is in some manner discontinuous, then "pchip" interpolation might give better results.
+
+This can be demonstrated by the code
+
+t = -2:2;
+dt = 1;
+ti =-2:0.025:2;
+dti = 0.025;
+y = sign (t);
+ys = interp1 (t,y,ti,"spline");
+yp = interp1 (t,y,ti,"pchip");
+ddys = diff (diff (ys)./dti) ./ dti;
+ddyp = diff (diff (yp)./dti) ./ dti;
+figure (1);
+plot (ti,ys,"r-", ti,yp,"g-");
+legend ("spline", "pchip", 4);
+figure (2);
+plot (ti,ddys,"r+", ti,ddyp,"g*");
+legend ("spline", "pchip");
+The result of which can be seen in Figure 29.1 and Figure 29.2.
+
+ interpderiv1
+Figure 29.1: Comparison of "pchip" and "spline" interpolation methods for a step function
+
+ interpderiv2
+Figure 29.2: Comparison of the second derivative of the "pchip" and "spline" interpolation methods for a step function
+
+Fourier interpolation, is a resampling technique where a signal is converted to the frequency domain, padded with zeros and then reconverted to the time domain.
+
+Function File: interpft (x, n)
+Function File: interpft (x, n, dim)
+Fourier interpolation.
+
+If x is a vector then x is resampled with n points. The data in x is assumed to be equispaced. If x is a matrix or an N-dimensional array, the interpolation is performed on each column of x.
+
+If dim is specified, then interpolate along the dimension dim.
+
+interpft assumes that the interpolated function is periodic, and so assumptions are made about the endpoints of the interpolation.
+
+See also: interp1.
+
+There are two significant limitations on Fourier interpolation. First, the function signal is assumed to be periodic, and so non-periodic signals will be poorly represented at the edges. Second, both the signal and its interpolation are required to be sampled at equispaced points. An example of the use of interpft is
+
+t = 0 : 0.3 : pi; dt = t(2)-t(1);
+n = length (t); k = 100;
+ti = t(1) + [0 : k-1]*dt*n/k;
+y = sin (4*t + 0.3) .* cos (3*t - 0.1);
+yp = sin (4*ti + 0.3) .* cos (3*ti - 0.1);
+plot (ti, yp, "g", ti, interp1 (t, y, ti, "spline"), "b", ...
+      ti, interpft (y, k), "c", t, y, "r+");
+legend ("sin(4t+0.3)cos(3t-0.1)", "spline", "interpft", "data");
+which demonstrates the poor behavior of Fourier interpolation for non-periodic functions, as can be seen in Figure 29.3.
+
+ interpft
+Figure 29.3: Comparison of interp1 and interpft for non-periodic data
+
+In addition, the support functions spline and lookup that underlie the interp1 function can be called directly.
+
+Function File: pp = spline (x, y)
+Function File: yi = spline (x, y, xi)
+Return the cubic spline interpolant of points x and y.
+
+When called with two arguments, return the piecewise polynomial pp that may be used with ppval to evaluate the polynomial at specific points.
+
+When called with a third input argument, spline evaluates the spline at the points xi. The third calling form spline (x, y, xi) is equivalent to ppval (spline (x, y), xi).
+
+The variable x must be a vector of length n.
+
+y can be either a vector or array. If y is a vector it must have a length of either n or n + 2. If the length of y is n, then the "not-a-knot" end condition is used. If the length of y is n + 2, then the first and last values of the vector y are the values of the first derivative of the cubic spline at the endpoints.
+
+If y is an array, then the size of y must have the form [s1, s2, …, sk, n] or [s1, s2, …, sk, n + 2]. The array is reshaped internally to a matrix where the leading dimension is given by s1 * s2 * … * sk and each row of this matrix is then treated separately. Note that this is exactly the opposite of interp1 but is done for MATLAB compatibility.
+
+See also: pchip, ppval, mkpp, unmkpp.
+
+Next: Multi-dimensional Interpolation, Up: Interpolation   [Contents][Index]

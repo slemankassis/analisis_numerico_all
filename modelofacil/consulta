@@ -1,0 +1,3 @@
+hold on para no borrar y mantener escala
+el tercer arg va a ser que no haga la linea continua y dibuje los puntos con un caracter
+en vez de fun, vector p donde uso subindices
